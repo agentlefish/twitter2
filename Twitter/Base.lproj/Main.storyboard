@@ -5,7 +5,6 @@
     </device>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -463,21 +462,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="JOc-uT-3lo">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="125"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="JOc-uT-3lo" secondAttribute="height" multiplier="3:1" id="F6L-7y-kfP"/>
-                                </constraints>
-                            </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Ejq-WM-Hno">
-                                <rect key="frame" x="16" y="105" width="65" height="65"/>
+                                <rect key="frame" x="16" y="129" width="65" height="65"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="65" id="HNG-dc-8iF"/>
                                     <constraint firstAttribute="width" constant="65" id="hhH-TB-V28"/>
                                 </constraints>
                             </imageView>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="0NO-bl-VLH">
-                                <rect key="frame" x="0.0" y="312" width="375" height="355"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="0NO-bl-VLH">
+                                <rect key="frame" x="0.0" y="336" width="375" height="331"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="TweetCell" rowHeight="114" id="JCU-1T-MR9" customClass="TweetCell" customModule="Twitter" customModuleProvider="target">
@@ -551,15 +544,15 @@
                                 </prototypes>
                             </tableView>
                             <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="2" translatesAutoresizingMaskIntoConstraints="NO" id="MmL-dd-T4u">
-                                <rect key="frame" x="176" y="149" width="23" height="37"/>
+                                <rect key="frame" x="176" y="173" width="23" height="37"/>
                                 <color key="pageIndicatorTintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="currentPageIndicatorTintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
                                     <action selector="onPageChanged:" destination="mae-RV-JOd" eventType="valueChanged" id="lIT-7S-fzI"/>
                                 </connections>
                             </pageControl>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="APn-ma-41P">
-                                <rect key="frame" x="16" y="186" width="343" height="50"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" restorationIdentifier="userInfoScrollView" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="APn-ma-41P">
+                                <rect key="frame" x="16" y="210" width="343" height="50"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="ljS-Uw-SeM">
                                         <rect key="frame" x="0.0" y="0.0" width="100" height="41"/>
@@ -610,7 +603,7 @@
                                 </constraints>
                             </scrollView>
                             <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TaJ-76-vLB">
-                                <rect key="frame" x="16" y="244" width="280" height="60"/>
+                                <rect key="frame" x="16" y="268" width="280" height="60"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" placeholderIntrinsicWidth="80" placeholderIntrinsicHeight="infinite" translatesAutoresizingMaskIntoConstraints="NO" id="VBg-T5-thQ">
                                         <rect key="frame" x="0.0" y="0.0" width="80" height="60"/>
@@ -702,12 +695,19 @@
                                     <constraint firstItem="5Zn-iT-mn6" firstAttribute="top" secondItem="VBg-T5-thQ" secondAttribute="top" id="YBU-QN-1Na"/>
                                 </constraints>
                             </stackView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="JOc-uT-3lo">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="125"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="125" id="dx7-Bq-gxw"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="JOc-uT-3lo" firstAttribute="top" secondItem="OIj-af-FEa" secondAttribute="top" id="2zT-mL-gL0"/>
                             <constraint firstItem="Ejq-WM-Hno" firstAttribute="leading" secondItem="OIj-af-FEa" secondAttribute="leading" constant="16" id="54D-5E-hO8"/>
-                            <constraint firstItem="Ejq-WM-Hno" firstAttribute="top" secondItem="JOc-uT-3lo" secondAttribute="bottom" constant="-20" id="5Wn-dR-f2z"/>
+                            <constraint firstItem="Ejq-WM-Hno" firstAttribute="top" secondItem="JOc-uT-3lo" secondAttribute="bottom" constant="4" id="5Wn-dR-f2z"/>
                             <constraint firstItem="0NO-bl-VLH" firstAttribute="top" secondItem="TaJ-76-vLB" secondAttribute="bottom" constant="8" id="5nB-Ao-Oq1"/>
                             <constraint firstItem="JOc-uT-3lo" firstAttribute="leading" secondItem="OIj-af-FEa" secondAttribute="leading" id="6Fj-sq-s2E"/>
                             <constraint firstItem="JOc-uT-3lo" firstAttribute="trailing" secondItem="OIj-af-FEa" secondAttribute="trailing" id="6Z2-gL-UCO"/>
@@ -723,6 +723,9 @@
                             <constraint firstItem="TaJ-76-vLB" firstAttribute="leading" secondItem="KeJ-dZ-4Bt" secondAttribute="leading" constant="16" id="ySN-Un-17f"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="KeJ-dZ-4Bt"/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="aik-NA-CVR" appends="YES" id="Ice-82-70i"/>
+                        </connections>
                     </view>
                     <navigationItem key="navigationItem" id="BhR-6J-fs8">
                         <barButtonItem key="leftBarButtonItem" image="logout" id="eZQ-0e-i8J"/>
@@ -737,9 +740,12 @@
                         <outlet property="descriptionPageWidthConstraint" destination="kH5-FZ-jBi" id="GKa-ZR-01a"/>
                         <outlet property="followersCountLabel" destination="Acd-qZ-rmE" id="egs-LD-8Qa"/>
                         <outlet property="followingCountLabel" destination="hoG-wc-y35" id="9ED-or-zOA"/>
+                        <outlet property="headerImgHeightConstraint" destination="dx7-Bq-gxw" id="3Mj-ve-FI1"/>
                         <outlet property="headerImgView" destination="JOc-uT-3lo" id="E1c-Y7-HIq"/>
                         <outlet property="infoScrollView" destination="APn-ma-41P" id="aKQ-T5-oDD"/>
                         <outlet property="pageControl" destination="MmL-dd-T4u" id="JiI-Y5-O4c"/>
+                        <outlet property="panGestureRecognizer" destination="aik-NA-CVR" id="gQO-i4-gwa"/>
+                        <outlet property="profileImgTopConstraint" destination="5Wn-dR-f2z" id="8lz-js-D8f"/>
                         <outlet property="profileImgView" destination="Ejq-WM-Hno" id="jG5-s1-XVr"/>
                         <outlet property="screennameLabel" destination="oxl-n2-tax" id="ltn-vm-F1A"/>
                         <outlet property="tweetTableView" destination="0NO-bl-VLH" id="jy9-HO-Evl"/>
@@ -749,6 +755,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tqf-h4-JWz" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="aik-NA-CVR">
+                    <connections>
+                        <action selector="onPanGesture:" destination="mae-RV-JOd" id="Vtk-Xl-sTI"/>
+                    </connections>
+                </panGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="2229.5999999999999" y="-594.15292353823088"/>
         </scene>
@@ -941,7 +952,7 @@
         <image name="write" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="ETe-JT-389"/>
-        <segue reference="4WK-QI-c8Z"/>
+        <segue reference="QVU-dH-jLj"/>
+        <segue reference="dcT-NW-7wv"/>
     </inferredMetricsTieBreakers>
 </document>

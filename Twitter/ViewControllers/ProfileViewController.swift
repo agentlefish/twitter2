@@ -30,8 +30,23 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var usernamePageWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var descriptionPageWidthConstraint: NSLayoutConstraint!
     
+    @IBOutlet weak var profileImgTopConstraint: NSLayoutConstraint!
+    
+    @IBOutlet var panGestureRecognizer: UIPanGestureRecognizer!
+    @IBOutlet weak var headerImgHeightConstraint: NSLayoutConstraint!
     
     var screenname: String!
+    
+    private var originalProfileImgTopMargin: CGFloat!
+    private var originalHeaderImgHeight: CGFloat!
+    
+    private enum UIState {
+        case stretchingHeaderImg
+        case initial
+        case shrinkingHeaderImg
+        case movingUnderHeaderImg
+    }
+    private var uiState: UIState = .initial
     
     var user: User! {
         didSet {
@@ -71,6 +86,7 @@ class ProfileViewController: UIViewController {
         tweetTableView.dataSource = self
         
         infoScrollView.delegate = self
+        panGestureRecognizer.delegate = self
 
         let twitterService = TwitterService.sharedInstance
         twitterService?.getUser(byScreenName: screenname, orByUserId: nil, success: { (user: User) in
@@ -90,6 +106,10 @@ class ProfileViewController: UIViewController {
         self.navigationController?.navigationBar.shadowImage = UIImage()
         self.navigationController?.navigationBar.isTranslucent = true
         self.navigationController?.view.backgroundColor = UIColor.clear
+        
+        originalProfileImgTopMargin = profileImgTopConstraint.constant
+        headerImgHeightConstraint.constant = view.frame.width/3
+        originalHeaderImgHeight = headerImgView.frame.height
     }
     
     override func viewDidLayoutSubviews() {
@@ -110,6 +130,130 @@ class ProfileViewController: UIViewController {
         infoScrollView.setContentOffset(CGPoint(x: xOffset, y:0) , animated: true)
     }
     
+    @IBAction func onPanGesture(_ sender: UIPanGestureRecognizer) {
+        UIView.animate(withDuration: 0.5) {
+            let velocity = sender.velocity(in: self.view)
+            let translation = sender.translation(in: self.view)
+            if sender.state == .began {
+//                self.originalProfileImgTop = self.contentLeadingConstraint.constant
+//
+//                self.greyView.alpha = self.originalContentLeading < 5 ? 0 : 0.5
+//                self.contentView.bringSubview(toFront: self.greyView)
+            } else if sender.state == .changed {
+                
+                switch self.uiState {
+                    
+                case .stretchingHeaderImg:
+                    self.stretchHeaderImg(translation.y)
+                    break
+                case .initial:
+                    if translation.y > 0 {
+                        self.uiState = .stretchingHeaderImg
+                        self.stretchHeaderImg(translation.y)
+                    } else {
+                        self.uiState = .shrinkingHeaderImg
+                        self.shrinkHeaderImg(translation.y)
+                    }
+                    break
+                case .shrinkingHeaderImg:
+                    self.shrinkHeaderImg(translation.y)
+                    break
+                case .movingUnderHeaderImg:
+                    // this is negative
+                    let marginFromHeaderImgToTableview = self.headerImgView.frame.maxY - self.tweetTableView.frame.minY
+                    
+                    var newTopMargin = self.profileImgTopConstraint.constant + translation.y
+                    
+                    if newTopMargin > self.originalProfileImgTopMargin {
+                        newTopMargin = self.originalProfileImgTopMargin
+                        self.uiState = .shrinkingHeaderImg
+                    } else if translation.y < marginFromHeaderImgToTableview {
+                        newTopMargin = self.profileImgTopConstraint.constant + marginFromHeaderImgToTableview
+                    }
+                    
+                    self.profileImgTopConstraint.constant = newTopMargin
+                    break
+                }
+                
+                sender.setTranslation(CGPoint.zero, in: self.view)
+                
+                //if newProfileImgTopMargin <= self.originalProfileImgTopMargin {
+                
+                    
+//
+//                    var alpha = translation.x/self.view.frame.width*0.5
+//
+//                    if(translation.x < 0) {
+//                        alpha += 0.5
+//                    }
+//
+//                    self.greyView.alpha = alpha
+                //}
+                
+            } else if sender.state == .ended {
+
+                if self.uiState == .stretchingHeaderImg {
+                    //UIView.animate(withDuration: 0.3) {
+                        self.uiState = .initial
+                        self.headerImgHeightConstraint.constant = self.originalHeaderImgHeight
+                    //}
+                }
+                
+                if velocity.x > 0 {
+//                    self.contentLeadingConstraint.constant = self.menuWidthConstraint.constant
+//
+//                    self.greyView.alpha = 0.5
+//                    self.contentView.bringSubview(toFront: self.greyView)
+                    
+//                    let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.didTapOnGreyView(sender:)))
+//                    self.greyView.addGestureRecognizer(tapGestureRecognizer)
+                    
+                } else {
+//                    self.contentLeadingConstraint.constant = 0
+//
+//                    self.contentView.sendSubview(toBack: self.greyView)
+                }
+                
+                
+            }
+            
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    private func stretchHeaderImg(_ translationy: CGFloat) {
+        //maximux stretchable
+        let maxHeight = self.originalHeaderImgHeight + 40
+        
+        var newHeight = self.headerImgView.frame.height + translationy
+        
+        if newHeight <= self.originalHeaderImgHeight {
+            newHeight = self.originalHeaderImgHeight
+            self.uiState = .initial
+        } else if newHeight > maxHeight {
+            newHeight = maxHeight
+        }
+        
+        self.headerImgHeightConstraint.constant = newHeight
+    }
+    
+    private func shrinkHeaderImg(_ translationy: CGFloat) {
+        //maximux stretchable
+        let minHeight = self.navigationController?.navigationBar.frame.maxY ?? 40
+        
+        var newHeight = self.headerImgView.frame.height + translationy
+        
+        if newHeight >= self.originalHeaderImgHeight {
+            newHeight = self.originalHeaderImgHeight
+            self.uiState = .initial
+        } else if newHeight < minHeight {
+            newHeight = minHeight
+            self.uiState = .movingUnderHeaderImg
+        }
+        
+        self.headerImgHeightConstraint.constant = newHeight
+    }
+    
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -119,13 +263,6 @@ class ProfileViewController: UIViewController {
             destinationViewController.tweet = tweets[indexPath.row]
             //destinationViewController.composeViewDelegate = self
         }
-//        else if let destinationViewController = segue.destination as? UINavigationController {
-//            guard let composeTweetViewController = destinationViewController.topViewController as? ComposeTweetViewController else {
-//                return
-//            }
-//
-//            composeTweetViewController.delegate = self
-//        }
     }
 
 }
@@ -153,4 +290,33 @@ extension ProfileViewController: UIScrollViewDelegate {
         
         headerImgView.alpha = alpha
     }
+}
+
+extension ProfileViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        if otherGestureRecognizer.view?.restorationIdentifier == "userInfoScrollView"
+            && otherGestureRecognizer is UIPanGestureRecognizer {
+            return false
+        } else if let panGes = gestureRecognizer as? UIPanGestureRecognizer {
+            let translation = panGes.translation(in: self.view)
+            if abs(translation.x) < abs(translation.y) {
+                if !(otherGestureRecognizer.view is UITableView) {
+                    return false
+                }
+            }
+        }
+        return true;
+    }
+    
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if let panGes = gestureRecognizer as? UIPanGestureRecognizer {
+            let translation = panGes.translation(in: self.view)
+            if abs(translation.x) > abs(translation.y) {
+                return false
+            }
+        }
+        
+        return true
+    }
+
 }
