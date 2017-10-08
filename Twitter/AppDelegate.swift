@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         if User.currentUser != nil {
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let vc = storyboard.instantiateViewController(withIdentifier: "HomeNavigationController")
+            let vc = storyboard.instantiateViewController(withIdentifier: "HamburgerViewController")
             window?.rootViewController = vc
             
             print("found an user already logged in")
@@ -37,9 +37,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let navigationBarAppearace = UINavigationBar.appearance()
         
-        navigationBarAppearace.tintColor = UIColor.white
-        navigationBarAppearace.barTintColor = UIColor(red:29/255, green:161/255, blue:242/255, alpha:1.0)
+        navigationBarAppearace.tintColor = UIColor.black
+        //navigationBarAppearace.barTintColor = Utils.blue
+        //navigationBarAppearace.backgroundColor = UIColor.white
+        
         navigationBarAppearace.isTranslucent = false
+        
+        let barButtonItemAppearance = UIBarButtonItem.appearance()
+        barButtonItemAppearance.tintColor = UIColor.black
+        //barButtonItemAppearance.setBackgroundImage(UIImage(named:"square"), for: .normal, barMetrics: UIBarMetrics.default)
         
         return true
     }

@@ -19,6 +19,12 @@ class TwitterService: BDBOAuth1SessionManager {
     var loginSuccess: (() -> ())?
     var loginFailure: ((Error) -> ())?
     
+    enum TimelineType {
+        case home
+        case mentions
+        case user
+    }
+    
     static let sharedInstance = TwitterService(baseURL: URL(string: "https://api.twitter.com"), consumerKey: "RAHfq2C7VjV4S7vVB2XvhJGem", consumerSecret: "BiIZzhTg6baYf7VvukvRPqfAgHoes7eMbX5stYG3hBJUAHbbSc")
     
     func login(success:@escaping () -> (), failure:@escaping (Error) -> ()) {
@@ -68,15 +74,36 @@ class TwitterService: BDBOAuth1SessionManager {
         })
     }
     
-    func homeTimeline(olderthan tweetid: Int?, success: @escaping ([Tweet]) -> (), failure: @escaping (Error) -> ()) {
+    func getTimeline(_ type: TimelineType!, olderthan tweetid: Int?, forScreenName screenname: String?, success: @escaping ([Tweet]) -> (), failure: @escaping (Error) -> ()) {
         
         var parameters: [String : AnyObject] = [:]
         
         if let tweetid = tweetid {
-            parameters["max_id"] = tweetid as AnyObject
+            parameters["max_id"] = (tweetid-1) as AnyObject
+        }
+        
+        if let screenname = screenname {
+            parameters["screen_name"] = screenname as AnyObject
+        }
+        
+        var cmd: String!
+        
+        switch type {
+        case .home:
+            cmd = "1.1/statuses/home_timeline.json"
+            break
+        case .mentions:
+            cmd = "1.1/statuses/mentions_timeline.json"
+            break
+        case .user:
+            cmd = "1.1/statuses/user_timeline.json"
+            break
+        default:
+            cmd = "1.1/statuses/home_timeline.json"
+            break
         }
 
-        get("1.1/statuses/home_timeline.json", parameters: parameters, progress: nil, success: { (task: URLSessionDataTask, response: Any) -> Void in
+        get(cmd, parameters: parameters, progress: nil, success: { (task: URLSessionDataTask, response: Any) -> Void in
             
             let rootJSON = JSON(response)
             if let tweets = (rootJSON.array?.map { return Tweet.build($0) }) {
@@ -91,6 +118,31 @@ class TwitterService: BDBOAuth1SessionManager {
     func currentAccount(success: @escaping (User) -> (), failure: @escaping (Error) -> ()) {
         
         get("1.1/account/verify_credentials.json", parameters: nil, progress: nil, success: { (task: URLSessionDataTask, response: Any) -> Void in
+            
+            let rootJSON = JSON(response)
+            let user = User.build(rootJSON)
+            success(user)
+            print("current user name: \(user.name)")
+            
+        }, failure: { (task: URLSessionDataTask?, error: Error) -> Void in
+            print("error in get current user: \(error.localizedDescription)")
+            failure(error)
+        })
+    }
+    
+    func getUser(byScreenName screenname: String?, orByUserId userId: Int?, success: @escaping (User) -> (), failure: @escaping (Error) -> ()) {
+        
+        var parameters: [String : AnyObject] = [:]
+        
+        if let screenname = screenname {
+            parameters["screen_name"] = screenname as AnyObject
+        }
+        
+        if let userId = userId {
+            parameters["user_id"] = userId as AnyObject
+        }
+        
+        get("1.1/users/show.json", parameters: parameters, progress: nil, success: { (task: URLSessionDataTask, response: Any) -> Void in
             
             let rootJSON = JSON(response)
             let user = User.build(rootJSON)

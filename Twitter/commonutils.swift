@@ -9,6 +9,8 @@
 import UIKit
 
 class Utils {
+    static let blue = UIColor(red:29/255, green:161/255, blue:242/255, alpha:1.0)
+    
     class func popAlertWith(msg: String, in view: UIViewController) {
         let alertController = UIAlertController(title: "Error", message: msg, preferredStyle: .alert)
         

@@ -1,5 +1,5 @@
 //
-//  HomeViewController.swift
+//  TimelineViewController.swift
 //  Twitter
 //
 //  Created by Xiang Yu on 9/26/17.
@@ -9,13 +9,21 @@
 import UIKit
 import MBProgressHUD
 
-class HomeViewController: UIViewController {
+@objc protocol TimelineViewControllerDelegate {
+    @objc optional func timelineViewController(_ timelineViewController: TimelineViewController, didTapOnScreenname: String)
+}
+
+class TimelineViewController: UIViewController {
     
     var tweets: [Tweet] = []
     var isMoreDataLoading = false
+    
+    var timelineType: TwitterService.TimelineType!
 
     @IBOutlet weak var tweetsTableView: UITableView!
     @IBOutlet weak var loadingMoreView: UIView!
+    
+    var hamburgerViewController: HamburgerViewController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +41,7 @@ class HomeViewController: UIViewController {
         tweetsTableView.estimatedRowHeight = 100
         tweetsTableView.rowHeight = UITableViewAutomaticDimension
         
+        self.navigationItem.title = (timelineType == .mentions) ? "Mentions" : "Home"
     }
 
     override func didReceiveMemoryWarning() {
@@ -50,7 +59,7 @@ class HomeViewController: UIViewController {
         if initialLoad {
             MBProgressHUD.showAdded(to: self.view, animated: true)
         }
-        TwitterService.sharedInstance?.homeTimeline(olderthan: nil, success: { (tweets: [Tweet]) in
+        TwitterService.sharedInstance?.getTimeline(timelineType, olderthan: nil, forScreenName: nil, success: { (tweets: [Tweet]) in
             
             // Hide HUD once the network request comes back (must be done on main UI thread)
             MBProgressHUD.hide(for: self.view, animated: true)
@@ -92,7 +101,7 @@ class HomeViewController: UIViewController {
 
 // MARK: - Table View Delegate
 
-extension HomeViewController: UITableViewDelegate,UITableViewDataSource {
+extension TimelineViewController: UITableViewDelegate,UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tweets.count;
     }
@@ -100,6 +109,7 @@ extension HomeViewController: UITableViewDelegate,UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tweetsTableView.dequeueReusableCell(withIdentifier: "TweetCell", for: indexPath) as! TweetCell
         cell.tweet = tweets[indexPath.row]
+        cell.delegate = self.hamburgerViewController
         
         return cell
     }
@@ -123,7 +133,7 @@ extension HomeViewController: UITableViewDelegate,UITableViewDataSource {
                 //artificially delay for 3 sec to avoid 429 error
                 let when = DispatchTime.now() + 3
                 DispatchQueue.main.asyncAfter(deadline: when) {
-                    TwitterService.sharedInstance?.homeTimeline(olderthan: self.tweets.last?.id, success: { (tweets: [Tweet]) in
+                    TwitterService.sharedInstance?.getTimeline(self.timelineType, olderthan: self.tweets.last?.id, forScreenName: nil, success: { (tweets: [Tweet]) in
                         
                         // Hide HUD once the network request comes back (must be done on main UI thread)
                         MBProgressHUD.hide(for: self.loadingMoreView, animated: true)
@@ -147,7 +157,7 @@ extension HomeViewController: UITableViewDelegate,UITableViewDataSource {
 
 // MARK: - Compose Tweet View Delegate
 
-extension HomeViewController: ComposeTweetViewControllerDelegate {
+extension TimelineViewController: ComposeTweetViewControllerDelegate {
     func composeTweetViewController(_ composeTweetViewController: ComposeTweetViewController, didTweet status: Tweet) {
         self.tweets.insert(status, at: 0)
         self.tweetsTableView.reloadData()

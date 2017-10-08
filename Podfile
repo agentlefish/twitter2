@@ -10,6 +10,7 @@ target 'Twitter' do
   pod 'BDBOAuth1Manager'
   pod 'SwiftyJSON'
   pod 'MBProgressHUD'
+  pod ‘FLEX’
 
   target 'TwitterTests' do
     inherit! :search_paths

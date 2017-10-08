@@ -16,21 +16,24 @@ PODS:
     - AFNetworking/NSURLSession
   - BDBOAuth1Manager (2.0.0):
     - AFNetworking/NSURLSession (~> 3.0.0)
+  - FLEX (2.4.0)
   - MBProgressHUD (1.0.0)
   - SwiftyJSON (3.1.4)
 
 DEPENDENCIES:
   - AFNetworking
   - BDBOAuth1Manager
+  - FLEX
   - MBProgressHUD
   - SwiftyJSON
 
 SPEC CHECKSUMS:
   AFNetworking: a0075feb321559dc78d9d85b55d11caa19eabb93
   BDBOAuth1Manager: 92d17d06f8a648602962304cd2f35ae7394fa001
+  FLEX: bd1a39e55b56bb413b6f1b34b3c10a0dc44ef079
   MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
-PODFILE CHECKSUM: 610b736a02f5b125bbda82a7d9695ee3e76a3863
+PODFILE CHECKSUM: 6e9f85b302a8158e17800307381988df36a1012f
 
 COCOAPODS: 1.3.1

@@ -14,7 +14,12 @@ class User: NSObject {
     var name: String?
     var screenname: String?
     var profileImgUrl: URL?
+    var headerImgUrl: URL?
     var tagline: String?
+    
+    var tweetsCount: Int?
+    var followingCount: Int?
+    var followersCount: Int?
     
     var json:JSON?
     
@@ -25,8 +30,16 @@ class User: NSObject {
         screenname = json["screen_name"].string
         tagline = json["description"].string
         
+        tweetsCount = json["statuses_count"].int
+        followingCount = json["friends_count"].int
+        followersCount = json["followers_count"].int
+        
         if let imgUrlStr = json["profile_image_url_https"].string {
             profileImgUrl = URL(string: imgUrlStr)
+        }
+        
+        if let imgUrlStr = json["profile_banner_url"].string {
+            headerImgUrl = URL(string: imgUrlStr)
         }
     }
     
