@@ -20,8 +20,8 @@ The following **optional** features are implemented:
 
 - [ ] Profile Page
    - [x] Implement the paging view for the user description.
-   - [ ] As the paging view moves, increase the opacity of the background screen. See the actual Twitter app for this effect
-   - [ ] Pulling down the profile page should blur and resize the header image.
+   - [x] As the paging view moves, increase the opacity of the background screen. See the actual Twitter app for this effect
+   - [x] Pulling down the profile page should blur and resize the header image.
 - [ ] Account switching
    - [ ] Long press on tab bar to bring up Account view with animation
    - [ ] Tap account to switch to
@@ -31,8 +31,13 @@ The following **optional** features are implemented:
 
 The following **additional** features are implemented:
 
-- [x] Grey in and out effect on content view as user dragged the menu in hamburger view. Disable user interaction in views inside content view while the menu view is shown. Capturing tap gesture on content view to fold the menu.
-- [x] Adjust auto layout constraint of the page view width inside the page scroll view in respect to the actual scroll view frame width. (in viewDidLayoutSubviews)
+- [x] Hamburger menu
+  - [x] Grey in and out effect on content view as user dragged the menu in hamburger view. Disable user interaction in subviews inside content view while the menu view is shown. Capturing tap gesture on content view to fold the menu.
+- [x] Profile Page
+  - [x] Adjust auto layout constraint of the page view width inside the page scroll view in respect to the actual scroll view frame width. (in viewDidLayoutSubviews)
+  - [x] Make navigation bar transparent. Show header image under navigation bar. Pull down the profile page to fold the header image into size of navigation bar and make it blurry.
+  - [x] Only using table view for the user tweets table and implement the scoll on the page using a simple state machine. So the scroll indicator only shows in the bottom tweets table part while the upper user info part move separately.
+  
 
 Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
 

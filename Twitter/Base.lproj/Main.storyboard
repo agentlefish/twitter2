@@ -462,6 +462,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <visualEffectView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bGc-Q6-9pg">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="125"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" insetsLayoutMarginsFromSafeArea="NO" id="HPL-ic-YlZ">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="125"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                </view>
+                                <blurEffect style="light"/>
+                            </visualEffectView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Ejq-WM-Hno">
                                 <rect key="frame" x="16" y="129" width="65" height="65"/>
                                 <constraints>
@@ -740,6 +749,7 @@
                         <outlet property="descriptionPageWidthConstraint" destination="kH5-FZ-jBi" id="GKa-ZR-01a"/>
                         <outlet property="followersCountLabel" destination="Acd-qZ-rmE" id="egs-LD-8Qa"/>
                         <outlet property="followingCountLabel" destination="hoG-wc-y35" id="9ED-or-zOA"/>
+                        <outlet property="headerBlurView" destination="bGc-Q6-9pg" id="K5H-TI-qZw"/>
                         <outlet property="headerImgHeightConstraint" destination="dx7-Bq-gxw" id="3Mj-ve-FI1"/>
                         <outlet property="headerImgView" destination="JOc-uT-3lo" id="E1c-Y7-HIq"/>
                         <outlet property="infoScrollView" destination="APn-ma-41P" id="aKQ-T5-oDD"/>

@@ -7,12 +7,13 @@
 //
 
 import UIKit
-import FLEX
+//import FLEX
 
 class ProfileViewController: UIViewController {
 
     @IBOutlet weak var headerImgView: UIImageView!
     @IBOutlet weak var profileImgView: UIImageView!
+    @IBOutlet weak var headerBlurView: UIVisualEffectView!
     
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var screennameLabel: UILabel!
@@ -39,6 +40,13 @@ class ProfileViewController: UIViewController {
     
     private var originalProfileImgTopMargin: CGFloat!
     private var originalHeaderImgHeight: CGFloat!
+    
+    private enum AdjustType {
+        case none
+        case toFront
+        case toBack
+    }
+    private var adjustBlurView: AdjustType = .none
     
     private enum UIState {
         case stretchingHeaderImg
@@ -78,7 +86,7 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        FLEXManager.shared().showExplorer()
+        //FLEXManager.shared().showExplorer()
         
         //pageControl.transform = CGAffineTransform(scaleX: 1, y: 1)
         
@@ -116,6 +124,7 @@ class ProfileViewController: UIViewController {
         //print(infoScrollView.frame.width)
         usernamePageWidthConstraint.constant = infoScrollView.bounds.width
         descriptionPageWidthConstraint.constant = infoScrollView.bounds.width
+        headerBlurView.frame = headerImgView.bounds
         
         infoScrollView.layoutIfNeeded()
     }
@@ -131,14 +140,11 @@ class ProfileViewController: UIViewController {
     }
     
     @IBAction func onPanGesture(_ sender: UIPanGestureRecognizer) {
-        UIView.animate(withDuration: 0.5) {
-            let velocity = sender.velocity(in: self.view)
+        UIView.animate(withDuration: 0.3, animations: {
+            //let velocity = sender.velocity(in: self.view)
             let translation = sender.translation(in: self.view)
             if sender.state == .began {
-//                self.originalProfileImgTop = self.contentLeadingConstraint.constant
-//
-//                self.greyView.alpha = self.originalContentLeading < 5 ? 0 : 0.5
-//                self.contentView.bringSubview(toFront: self.greyView)
+                
             } else if sender.state == .changed {
                 
                 switch self.uiState {
@@ -167,6 +173,8 @@ class ProfileViewController: UIViewController {
                     if newTopMargin > self.originalProfileImgTopMargin {
                         newTopMargin = self.originalProfileImgTopMargin
                         self.uiState = .shrinkingHeaderImg
+                        
+                        self.adjustBlurView = .toBack
                     } else if translation.y < marginFromHeaderImgToTableview {
                         newTopMargin = self.profileImgTopConstraint.constant + marginFromHeaderImgToTableview
                     }
@@ -177,48 +185,31 @@ class ProfileViewController: UIViewController {
                 
                 sender.setTranslation(CGPoint.zero, in: self.view)
                 
-                //if newProfileImgTopMargin <= self.originalProfileImgTopMargin {
-                
-                    
-//
-//                    var alpha = translation.x/self.view.frame.width*0.5
-//
-//                    if(translation.x < 0) {
-//                        alpha += 0.5
-//                    }
-//
-//                    self.greyView.alpha = alpha
-                //}
-                
             } else if sender.state == .ended {
 
                 if self.uiState == .stretchingHeaderImg {
-                    //UIView.animate(withDuration: 0.3) {
+                    UIView.animate(withDuration: 0.3) {
                         self.uiState = .initial
                         self.headerImgHeightConstraint.constant = self.originalHeaderImgHeight
-                    //}
+                    }
                 }
-                
-                if velocity.x > 0 {
-//                    self.contentLeadingConstraint.constant = self.menuWidthConstraint.constant
-//
-//                    self.greyView.alpha = 0.5
-//                    self.contentView.bringSubview(toFront: self.greyView)
-                    
-//                    let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.didTapOnGreyView(sender:)))
-//                    self.greyView.addGestureRecognizer(tapGestureRecognizer)
-                    
-                } else {
-//                    self.contentLeadingConstraint.constant = 0
-//
-//                    self.contentView.sendSubview(toBack: self.greyView)
-                }
-                
                 
             }
             
             self.view.layoutIfNeeded()
+        }) { (completed) in
+            self.adjustBlurViewIfNeeded()
         }
+    }
+    
+    private func adjustBlurViewIfNeeded() {
+        if self.adjustBlurView == .toFront {
+            self.view.bringSubview(toFront: self.headerBlurView)
+        } else if self.adjustBlurView == .toBack {
+            self.view.sendSubview(toBack: self.headerBlurView)
+        }
+        
+        self.adjustBlurView = .none
     }
     
     private func stretchHeaderImg(_ translationy: CGFloat) {
@@ -249,6 +240,7 @@ class ProfileViewController: UIViewController {
         } else if newHeight < minHeight {
             newHeight = minHeight
             self.uiState = .movingUnderHeaderImg
+            adjustBlurView = .toFront
         }
         
         self.headerImgHeightConstraint.constant = newHeight
