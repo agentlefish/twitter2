@@ -27,7 +27,7 @@ class TwitterService: BDBOAuth1SessionManager {
     
     static let sharedInstance = TwitterService(baseURL: URL(string: "https://api.twitter.com"), consumerKey: "RAHfq2C7VjV4S7vVB2XvhJGem", consumerSecret: "BiIZzhTg6baYf7VvukvRPqfAgHoes7eMbX5stYG3hBJUAHbbSc")
     
-    func login(success:@escaping () -> (), failure:@escaping (Error) -> ()) {
+    func login(as screenname: String?, success:@escaping () -> (), failure:@escaping (Error) -> ()) {
         loginSuccess = success
         loginFailure = failure
         
@@ -35,7 +35,11 @@ class TwitterService: BDBOAuth1SessionManager {
         fetchRequestToken(withPath: "oauth/request_token", method: "GET", callbackURL: URL(string: "twittercodepath://oauth"), scope: nil, success: { (requestToken: BDBOAuth1Credential!) in
             print("I got a request token")
             
-            guard let url = URL(string: "https://api.twitter.com/oauth/authorize?oauth_token=\(requestToken.token!)") else {
+            var urlStr = "https://api.twitter.com/oauth/authorize?oauth_token=\(requestToken.token!)"
+            if let screenname = screenname {
+                urlStr += "&screen_name=\(screenname)"
+            }
+            guard let url = URL(string: urlStr) else {
                 print("error: authentication url error. request token: \(requestToken.token!)")
                 return
             }

@@ -47,7 +47,10 @@ class User: NSObject {
         return User(json: json)
     }
     
-    private static var _currentUser: User?
+    //screen names
+    static var authorizedUsers: [User] = []
+    
+    private static var _currentUser: User!
     
     class var currentUser: User? {
         get {
@@ -58,11 +61,21 @@ class User: NSObject {
             let defaults = UserDefaults.standard
             if let jsonStr = defaults.object(forKey: "currentUserJSON") as? String {
                 _currentUser = build(JSON(parseJSON: jsonStr))
+                
+                if authorizedUsers.index(of: _currentUser) == nil {
+                    authorizedUsers.append(_currentUser)
+                }
             }
             return _currentUser
         }
         
         set(user) {
+            if let user = user {
+                if authorizedUsers.index(of: user) == nil {
+                    authorizedUsers.append(user)
+                }
+            }
+            
             let defaults = UserDefaults.standard
             
             defaults.set(user?.json?.rawString(), forKey: "currentUserJSON")
