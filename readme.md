@@ -18,14 +18,14 @@ The following **required** functionality is completed:
 
 The following **optional** features are implemented:
 
-- [ ] Profile Page
+- [x] Profile Page
    - [x] Implement the paging view for the user description.
    - [x] As the paging view moves, increase the opacity of the background screen. See the actual Twitter app for this effect
    - [x] Pulling down the profile page should blur and resize the header image.
-- [ ] Account switching
+- [x] Account switching
    - [x] Long press on tab bar to bring up Account view with animation
    - [x] Tap account to switch to
-   - [ ] Include a plus button to Add an Account
+   - [x] Include a plus button to Add an Account
    - [ ] Swipe to delete an account
 
 

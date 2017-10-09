@@ -54,10 +54,17 @@ class AccountsViewController: UIViewController {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let sender = sender as? UITableViewCell {
-            let indexPath = accountsTableView.indexPath(for: sender)!
-            User.currentUser = accounts[indexPath.row]
-        }
+//        if let sender = sender as? UITableViewCell {
+//            let indexPath = accountsTableView.indexPath(for: sender)!
+//            if User.currentUser != accounts[indexPath.row] {
+//                TwitterService.sharedInstance?.login(as: accounts[indexPath.row].screenname, success: { () -> () in
+//                    print("I've logged in")
+//
+//                }, failure: { (error: Error) -> () in
+//                    Utils.popAlertWith(msg: "error in login: \(error.localizedDescription)", in: self)
+//                })
+//            }
+//        }
     }
 
 }
@@ -72,6 +79,22 @@ extension AccountsViewController: UITableViewDelegate, UITableViewDataSource {
         cell.user = accounts[indexPath.row]
         
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if User.currentUser != accounts[indexPath.row] {
+            TwitterService.sharedInstance?.deauthorize()
+            
+            TwitterService.sharedInstance?.login(as: accounts[indexPath.row].screenname, success: { () -> () in
+                print("I've logged in")
+
+                self.performSegue(withIdentifier: "SwitchAccountSegue", sender: nil)
+            }, failure: { (error: Error) -> () in
+                Utils.popAlertWith(msg: "error in login: \(error.localizedDescription)", in: self)
+            })
+        } else {
+            self.performSegue(withIdentifier: "SwitchAccountSegue", sender: nil)
+        }
     }
 }
 

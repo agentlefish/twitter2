@@ -65,6 +65,7 @@ class TwitterService: BDBOAuth1SessionManager {
             
             self.currentAccount(success: { (user: User) in
                 User.currentUser = user
+                print("current user in from twiiter service: \(User.currentUser?.screenname)")
                 self.loginSuccess?()
             }, failure: { (error: Error) in
                 self.loginFailure?(error)

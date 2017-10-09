@@ -31,6 +31,12 @@ class MenuViewController: UIViewController {
         tableView.estimatedRowHeight = 50
         tableView.rowHeight = UITableViewAutomaticDimension
         
+        reloadViewControllers()
+    }
+    
+    func reloadViewControllers() {
+        viewControllers.removeAll()
+        
         let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let profileNavViewController = mainStoryboard.instantiateViewController(withIdentifier: "ProfileNavigationController") as! UINavigationController
         let profileViewController = profileNavViewController.topViewController as! ProfileViewController
@@ -39,7 +45,7 @@ class MenuViewController: UIViewController {
         let homeNavViewController = mainStoryboard.instantiateViewController(withIdentifier: "TimelineNavigationController") as! UINavigationController
         let homeViewController = homeNavViewController.topViewController as! TimelineViewController
         homeViewController.timelineType = .home
-
+        
         let mentionsNavViewController = mainStoryboard.instantiateViewController(withIdentifier: "TimelineNavigationController") as! UINavigationController
         let mentionsViewController = mentionsNavViewController.topViewController as! TimelineViewController
         mentionsViewController.timelineType = .mentions

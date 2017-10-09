@@ -852,7 +852,6 @@
                                             <outlet property="profileImgView" destination="BlP-Pp-8eM" id="aez-7R-WbQ"/>
                                             <outlet property="screennameLabel" destination="OfE-gj-iSr" id="edR-FA-rXS"/>
                                             <outlet property="usernameLabel" destination="NsX-Lh-1G6" id="JJR-1o-ee1"/>
-                                            <segue destination="hVg-28-jq3" kind="presentation" identifier="SwitchAccountSegue" id="4Tj-Lk-Kyc"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -868,6 +867,7 @@
                     <connections>
                         <outlet property="accountsTableView" destination="p6X-nt-ng6" id="tIA-WP-UHc"/>
                         <outlet property="panGesture" destination="Fxf-XX-s0c" id="g8y-q9-555"/>
+                        <segue destination="hVg-28-jq3" kind="presentation" identifier="SwitchAccountSegue" id="5jb-eq-xq6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Fj2-aQ-qhf" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1070,7 +1070,7 @@
         <image name="write" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="4Tj-Lk-Kyc"/>
+        <segue reference="5jb-eq-xq6"/>
         <segue reference="ETe-JT-389"/>
         <segue reference="4WK-QI-c8Z"/>
     </inferredMetricsTieBreakers>

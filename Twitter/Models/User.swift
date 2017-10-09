@@ -58,14 +58,14 @@ class User: NSObject {
                 return _currentUser
             }
             
-            let defaults = UserDefaults.standard
-            if let jsonStr = defaults.object(forKey: "currentUserJSON") as? String {
-                _currentUser = build(JSON(parseJSON: jsonStr))
-                
-                if authorizedUsers.index(of: _currentUser) == nil {
-                    authorizedUsers.append(_currentUser)
-                }
-            }
+//            let defaults = UserDefaults.standard
+//            if let jsonStr = defaults.object(forKey: "currentUserJSON") as? String {
+//                _currentUser = build(JSON(parseJSON: jsonStr))
+//                
+//                if authorizedUsers.index(of: _currentUser) == nil {
+//                    authorizedUsers.append(_currentUser)
+//                }
+//            }
             return _currentUser
         }
         
@@ -73,6 +73,10 @@ class User: NSObject {
             if let user = user {
                 if authorizedUsers.index(of: user) == nil {
                     authorizedUsers.append(user)
+                }
+                
+                if user != _currentUser {
+                    _currentUser = user
                 }
             }
             
